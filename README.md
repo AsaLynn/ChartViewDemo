@@ -1,10 +1,10 @@
 # ChartViewDemo
-简单图表
+
+# 简单图表
 - 柱状图
 
 # 效果图
-![Image text](/image/image01.png)
-
+![Image text](https://github.com/zhang721688/ChartViewDemo/blob/master/image/image01.png)
 
 # 依赖
 ```
