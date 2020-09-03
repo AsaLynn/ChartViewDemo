@@ -3,6 +3,8 @@
 - 柱状图
 
 # 效果图
+![Image text](/image/image01.png)
+
 
 # 依赖
 ```
