@@ -41,8 +41,10 @@ public class BarChartView extends View {
     private int height;
     //柱状图数据
     private List<Double> data = new ArrayList<>();
+    //
+    private List<IChartEntity> dataList = new ArrayList<>();
     //X轴月份
-    private List<String> monthList = new ArrayList<>();
+//    private List<String> monthList = new ArrayList<>();
     //柱状图数据颜色
     private int[] columnColors = new int[]{Color.parseColor("#63AA99"), Color.parseColor("#63AA99"), Color.parseColor("#63AA99"), Color.parseColor("#63AA99"), Color.parseColor("#63AA99"), Color.parseColor("#63AA99")};
     //单位
@@ -52,8 +54,18 @@ public class BarChartView extends View {
     private boolean onDraw = false;
     private double[] aniProgress;// 实现动画的值
     private HistogramAnimation ani;
+    /**
+     * 控制是否绘制Y轴刻度文字
+     */
     private boolean drawYText;
+    /**
+     * 控制是否绘制背景横线
+     */
     private boolean drawYTextLine;
+    /**
+     * 名字距离横坐标的距离
+     */
+    private float nameTopPadding;
 
     public BarChartView(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -63,8 +75,45 @@ public class BarChartView extends View {
         titleSize = sp2px(getContext(), 12);
     }
 
-    public void setData(List<Double> data) {
-        this.data = data;
+//    public void setData(List<Double> data) {
+//        this.data = data;
+//        maxAxisValueY = Collections.max(data);
+//        aniProgress = new double[data.size()];
+//        for (int i = 0; i < data.size(); i++) {
+//            aniProgress[i] = 0;
+//        }
+//        ani = new HistogramAnimation();
+//        ani.setDuration(500);
+//    }
+//    public void setMonthList(List<String> monthList) {
+//        this.monthList = monthList;
+//    }
+
+    /**
+     * 使用新的数据集合，改变原有数据集合内容。
+     * 注意：不会替换原有的内存引用，只是替换内容
+     *
+     * @param list List
+     */
+    public void setList(List<IChartEntity> list) {
+        if (list != this.dataList) {
+            this.dataList.clear();
+            if (null != list && !list.isEmpty()) {
+                this.dataList.addAll(list);
+            }
+        } else {
+            if (null != list && !list.isEmpty()) {
+                List<IChartEntity> newList = new ArrayList(list);
+                this.dataList.clear();
+                this.dataList.addAll(newList);
+            } else {
+                this.dataList.clear();
+            }
+        }
+        data.clear();
+        for (IChartEntity t : dataList) {
+            data.add(t.getValue());
+        }
         maxAxisValueY = Collections.max(data);
         aniProgress = new double[data.size()];
         for (int i = 0; i < data.size(); i++) {
@@ -72,10 +121,9 @@ public class BarChartView extends View {
         }
         ani = new HistogramAnimation();
         ani.setDuration(500);
-    }
 
-    public void setMonthList(List<String> monthList) {
-        this.monthList = monthList;
+        setOnDraw(true);
+        start();
     }
 
     public void setOnDraw(boolean onDraw) {
@@ -293,18 +341,35 @@ public class BarChartView extends View {
                 paint.setColor(columnColors[i]);
                 float leftTopY = (float) (originY - (height - topY) * aniProgress[i] / MaxAxisYValue);
 
-                canvas.drawRect(
+                /*canvas.drawRect(
                         originX + cellWidth * i + (cellWidth - ColumnWidth) / 2,
                         leftTopY,
                         originX + cellWidth * i + (cellWidth - ColumnWidth) / 2 + ColumnWidth,
                         originY,
-                        mPaint);//左上角x,y右下角x,y，画笔
+                        mPaint);*/
+                //左上角x,y右下角x,y，画笔
 
                 //            float textWidth = paint.measureText(shList.get(i)+"");
                 //            canvas.drawText(shList.get(i)+"",
                 //            		originX + cellWidth * i + (cellWidth - textWidth)/2,
                 //            		leftTopY - dip2px(getContext(), 10),
                 //            		paint);
+
+                mPaint.setStrokeWidth(ColumnWidth);
+                mPaint.setStrokeCap(Paint.Cap.BUTT);
+                float startX = originX + cellWidth * i + (cellWidth - ColumnWidth) / 2 + ColumnWidth / 2;
+                float startY = originY;
+                float stopX = startX;
+                float stopY = leftTopY;
+                canvas.drawLine(startX, startY, stopX, stopY, mPaint);
+
+                //绘制柱状图顶部的圆角.
+                mPaint.setStrokeCap(Paint.Cap.ROUND);
+                float endStartX = stopX;
+                float endStartY = stopY;
+                float endStopX = endStartX;
+                float endStopY = stopY - ColumnWidth;
+                canvas.drawLine(endStartX, endStartY, endStopX, endStopY, mPaint);
             }
         }
     }
@@ -417,11 +482,12 @@ public class BarChartView extends View {
         paint.setFakeBoldText(true);
 
         float cellWidth = (width) / data.size();
-        for (int i = 0; i < monthList.size(); i++) {
-            float textWidth = paint.measureText(monthList.get(i) + "月");
-            canvas.drawText(monthList.get(i) + "月",
+        nameTopPadding = 15;
+        for (int i = 0; i < dataList.size(); i++) {
+            float textWidth = paint.measureText(dataList.get(i).chartName());
+            canvas.drawText(dataList.get(i).chartName(),
                     originX + cellWidth * i + (cellWidth - textWidth) / 2,
-                    originY + dip2px(getContext(), 15),
+                    originY + dip2px(getContext(), 12 + nameTopPadding),
                     paint);
         }
     }
