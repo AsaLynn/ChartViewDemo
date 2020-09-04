@@ -33,4 +33,8 @@ columnChartView.setList(list);
 ```
 # 更新日志
 - chartview:1.0.1
-发布正式使用
+```
+git tag -a v1.0.1 -m '发布正式使用'
+git push origin v1.0.1
+git tag
+```
