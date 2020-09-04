@@ -1,6 +1,7 @@
 package com.chart_demo1;
 
-import com.zxn.chart.IChartEntity;
+
+import com.zxn.chartview.IChartEntity;
 
 /**
  * Created by zxn on 2020/9/3.

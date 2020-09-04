@@ -6,9 +6,9 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 
-import com.zxn.chart.BarChartView;
-import com.zxn.chart.IChartEntity;
-import com.zxn.chart.util.Screen;
+import com.zxn.chartview.BarChartView;
+import com.zxn.chartview.IChartEntity;
+import com.zxn.chartview.util.Screen;
 
 import java.util.ArrayList;
 import java.util.List;

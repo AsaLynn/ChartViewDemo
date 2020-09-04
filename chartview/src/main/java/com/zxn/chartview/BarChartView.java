@@ -46,7 +46,7 @@ public class BarChartView extends View {
     //X轴月份
 //    private List<String> monthList = new ArrayList<>();
     //柱状图数据颜色
-    private int[] columnColors = new int[]{Color.parseColor("#63AA99"), Color.parseColor("#63AA99"), Color.parseColor("#63AA99"), Color.parseColor("#63AA99"), Color.parseColor("#63AA99"), Color.parseColor("#63AA99")};
+    private int[] columnColors = new int[]{Color.parseColor("#02BB9D"), Color.parseColor("#02BB9D"), Color.parseColor("#02BB9D"), Color.parseColor("#02BB9D"), Color.parseColor("#02BB9D"), Color.parseColor("#02BB9D")};
     //单位
     private int unit;        //单位系数
     private int unitNum;    //位数
