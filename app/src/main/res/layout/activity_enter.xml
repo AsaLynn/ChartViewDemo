@@ -36,4 +36,19 @@
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@id/tv_bar1" />
 
+    <TextView
+        android:id="@+id/tv_bar3"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:background="@android:color/holo_green_dark"
+        android:gravity="center"
+        android:padding="10dp"
+        android:text="柱状图3"
+        android:textColor="@android:color/white"
+        android:textSize="18sp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tv_bar2" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

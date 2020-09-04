@@ -8,6 +8,7 @@
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
         android:theme="@style/Theme.AppCompat.Light.NoActionBar">
+        <activity android:name=".BarChatActivity"></activity>
         <activity android:name=".EnterActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -18,17 +19,18 @@
         <activity
             android:name=".MainActivity"
             android:label="@string/app_name">
-            <!--<intent-filter>
+
+            <!--
+            <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>-->
+            </intent-filter>
+            -->
         </activity>
-
         <activity
             android:name=".VerticalColumnarGraphViewActivity"
             android:label="@string/app_name" />
-
     </application>
 
 </manifest>

@@ -7,4 +7,6 @@ public interface IChartEntity {
     String chartName();
 
     double getValue();
+
+    double[] getValues();
 }

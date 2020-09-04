@@ -5,10 +5,13 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
+import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.Transformation;
+
+import androidx.annotation.ColorInt;
 
 import com.zxn.chartview.util.LogUtil;
 import com.zxn.chartview.util.Screen;
@@ -41,10 +44,8 @@ public class BarChartView extends View {
     private int height;
     //柱状图数据
     private List<Double> data = new ArrayList<>();
-    //
     private List<IChartEntity> dataList = new ArrayList<>();
-    //X轴月份
-//    private List<String> monthList = new ArrayList<>();
+    private List<? extends IChartValueEntity> mChartValueList = new ArrayList<>();
     //柱状图数据颜色
     private int[] columnColors = new int[]{Color.parseColor("#02BB9D"), Color.parseColor("#02BB9D"), Color.parseColor("#02BB9D"), Color.parseColor("#02BB9D"), Color.parseColor("#02BB9D"), Color.parseColor("#02BB9D")};
     //单位
@@ -69,25 +70,21 @@ public class BarChartView extends View {
 
     public BarChartView(Context context, AttributeSet attrs) {
         super(context, attrs);
+        Screen.initScreen(context);
         //创建画笔
         mPaint = new Paint();
         //获取配置的属性值
         titleSize = sp2px(getContext(), 12);
     }
 
-//    public void setData(List<Double> data) {
-//        this.data = data;
-//        maxAxisValueY = Collections.max(data);
-//        aniProgress = new double[data.size()];
-//        for (int i = 0; i < data.size(); i++) {
-//            aniProgress[i] = 0;
-//        }
-//        ani = new HistogramAnimation();
-//        ani.setDuration(500);
-//    }
-//    public void setMonthList(List<String> monthList) {
-//        this.monthList = monthList;
-//    }
+    /**
+     * 柱状图要展示的值类型
+     *
+     * @param list List
+     */
+    public void setChartValueList(List<? extends IChartValueEntity> list) {
+        this.mChartValueList = list;
+    }
 
     /**
      * 使用新的数据集合，改变原有数据集合内容。
@@ -95,7 +92,7 @@ public class BarChartView extends View {
      *
      * @param list List
      */
-    public void setList(List<IChartEntity> list) {
+    public void setList(List<? extends IChartEntity> list) {
         if (list != this.dataList) {
             this.dataList.clear();
             if (null != list && !list.isEmpty()) {
@@ -166,8 +163,7 @@ public class BarChartView extends View {
                 drawAxisScaleMarkValueY(canvas, mPaint);
             }
             drawColumn(canvas, mPaint);
-            drawTitle(canvas, mPaint);
-            //drawChart(canvas,mPaint);
+            drawValueType(canvas, mPaint);
         }
     }
 
@@ -332,7 +328,7 @@ public class BarChartView extends View {
         if (data == null)
             return;
         float cellWidth = (width) / data.size();
-        float ColumnWidth = dip2px(getContext(), 18);
+        float ColumnWidth = dip2px(getContext(), 16);
         //Y轴最大刻度
         float MaxAxisYValue = getCellValue((float) (maxAxisValueY / axisDivideSizeY)) * axisDivideSizeY;
 
@@ -340,7 +336,6 @@ public class BarChartView extends View {
             for (int i = 0; i < aniProgress.length; i++) {
                 paint.setColor(columnColors[i]);
                 float leftTopY = (float) (originY - (height - topY) * aniProgress[i] / MaxAxisYValue);
-
                 /*canvas.drawRect(
                         originX + cellWidth * i + (cellWidth - ColumnWidth) / 2,
                         leftTopY,
@@ -348,13 +343,13 @@ public class BarChartView extends View {
                         originY,
                         mPaint);*/
                 //左上角x,y右下角x,y，画笔
-
                 //            float textWidth = paint.measureText(shList.get(i)+"");
                 //            canvas.drawText(shList.get(i)+"",
                 //            		originX + cellWidth * i + (cellWidth - textWidth)/2,
                 //            		leftTopY - dip2px(getContext(), 10),
                 //            		paint);
 
+                // TODO: 2020/9/4  (每条数据绘制多个柱状图的情况)
                 mPaint.setStrokeWidth(ColumnWidth);
                 mPaint.setStrokeCap(Paint.Cap.BUTT);
                 float startX = originX + cellWidth * i + (cellWidth - ColumnWidth) / 2 + ColumnWidth / 2;
@@ -391,6 +386,136 @@ public class BarChartView extends View {
                     paint);
         }
     }
+
+
+    /**
+     * 绘制横坐标轴刻度值(X轴)
+     *
+     * @param canvas
+     * @param paint
+     */
+    private void drawAxisScaleMarkValueX(Canvas canvas, Paint paint) {
+        //设置画笔绘制文字的属性
+        paint.setColor(Color.parseColor("#999999"));
+        paint.setTextSize(sp2px(getContext(), 12));
+        paint.setFakeBoldText(true);
+
+        float cellWidth = (width) / dataList.size();
+        nameTopPadding = 15;
+        for (int i = 0; i < dataList.size(); i++) {
+            String chartName = dataList.get(i).chartName();
+            String name = TextUtils.isEmpty(chartName) ? "TOP" + (i + 1) : chartName;
+            float textWidth = paint.measureText(name);
+            canvas.drawText(name,
+                    originX + cellWidth * i + (cellWidth - textWidth) / 2,
+                    originY + dip2px(getContext(), 12 + nameTopPadding),
+                    paint);
+        }
+    }
+
+    /**
+     * 绘制柱状图的类型
+     *
+     * @param canvas Canvas
+     * @param paint  Paint
+     */
+    private void drawValueType(Canvas canvas, Paint paint) {
+        if (mChartValueList.isEmpty()) {
+            return;
+        }
+        //设置画笔绘制文字的属性
+
+        mPaint.setTextSize(titleSize);
+        mPaint.setFakeBoldText(false);
+
+        //绘制类型名称
+        for (int i = 0; i < mChartValueList.size(); i++) {
+            IChartValueEntity entity = mChartValueList.get(i);
+            String valueType = TextUtils.isEmpty(entity.valueType()) ? "" : entity.valueType();
+            float textWidth = mPaint.measureText(valueType);
+            float x = getWidth() - dip2px(getContext(), 10) - textWidth;
+            float y = dip2px(getContext(), 20) + titleSize + (titleSize + dip2px(getContext(), 5)) * i;
+            mPaint.setColor(Color.parseColor("#999999"));
+            canvas.drawText(valueType, x, y, paint);
+
+            int textPadding = 10;
+            int top = (int) (y - dip2px(getContext(), 12));
+            int left = (int) (x - dip2px(getContext(), 15 + textPadding));
+            drawRectIcon(canvas, left, top, entity.valueColor());
+        }
+
+    }
+
+    private void drawRectIcon(Canvas canvas, int left, int top, @ColorInt int color) {
+        Rect rect = new Rect();
+        rect.left = left;
+        rect.top = top;
+        rect.bottom = top + dip2px(getContext(), 12);
+        rect.right = left + dip2px(getContext(), 15);
+        color = color == 0 ? Color.parseColor("#02bb9d") : color;
+        mPaint.setColor(color);
+        canvas.drawRect(rect, mPaint);
+        float cxLeft = left;
+        float cyLeft = rect.centerY();
+        float radius = (rect.bottom - rect.top) / 2;
+        canvas.drawCircle(cxLeft, cyLeft, radius, mPaint);
+        float cxRight = rect.right;
+        float cyRight = cyLeft;
+        canvas.drawCircle(cxRight, cyRight, radius, mPaint);
+    }
+
+
+    int dip2px(Context context, float dipValue) {
+        final float scale = context.getResources().getDisplayMetrics().density;
+        return (int) (dipValue * scale + 0.5f);
+    }
+
+    int sp2px(Context context, float spValue) {
+        final float fontScale = context.getResources().getDisplayMetrics().scaledDensity;
+        return (int) (spValue * fontScale + 0.5f);
+    }
+
+    public void start() {
+        this.startAnimation(ani);
+    }
+
+    /**
+     * 集成animation的一个动画类
+     */
+    private class HistogramAnimation extends Animation {
+        protected void applyTransformation(float interpolatedTime,
+                                           Transformation t) {
+            super.applyTransformation(interpolatedTime, t);
+
+            if (interpolatedTime < 1.0f) {
+                for (int i = 0; i < aniProgress.length; i++) {
+                    aniProgress[i] = (int) (data.get(i) * interpolatedTime);
+                }
+            } else {
+                for (int i = 0; i < aniProgress.length; i++) {
+                    aniProgress[i] = data.get(i);
+                }
+            }
+
+            invalidate();
+        }
+    }
+
+}
+
+//    public void setData(List<Double> data) {
+//        this.data = data;
+//        maxAxisValueY = Collections.max(data);
+//        aniProgress = new double[data.size()];
+//        for (int i = 0; i < data.size(); i++) {
+//            aniProgress[i] = 0;
+//        }
+//        ani = new HistogramAnimation();
+//        ani.setDuration(500);
+//    }
+//    public void setMonthList(List<String> monthList) {
+//        this.monthList = monthList;
+//    }
 
 //    /**
 //     * 绘制下方表数据
@@ -468,107 +593,3 @@ public class BarChartView extends View {
 //			}
 //		}
 //    }
-
-    /**
-     * 绘制横坐标轴刻度值(X轴)
-     *
-     * @param canvas
-     * @param paint
-     */
-    private void drawAxisScaleMarkValueX(Canvas canvas, Paint paint) {
-        //设置画笔绘制文字的属性
-        paint.setColor(Color.parseColor("#999999"));
-        paint.setTextSize(sp2px(getContext(), 12));
-        paint.setFakeBoldText(true);
-
-        float cellWidth = (width) / data.size();
-        nameTopPadding = 15;
-        for (int i = 0; i < dataList.size(); i++) {
-            float textWidth = paint.measureText(dataList.get(i).chartName());
-            canvas.drawText(dataList.get(i).chartName(),
-                    originX + cellWidth * i + (cellWidth - textWidth) / 2,
-                    originY + dip2px(getContext(), 12 + nameTopPadding),
-                    paint);
-        }
-    }
-
-    /**
-     * 绘制标题
-     *
-     * @param canvas
-     * @param paint
-     */
-    private void drawTitle(Canvas canvas, Paint paint) {
-
-        //设置画笔绘制文字的属性
-        mPaint.setColor(Color.parseColor("#999999"));
-        mPaint.setTextSize(titleSize);
-        mPaint.setFakeBoldText(false);
-
-        //绘制标题
-        float textWidth = mPaint.measureText("开卡数量");
-        float x = getWidth() - dip2px(getContext(), 10) - textWidth;
-        float y = dip2px(getContext(), 20) + titleSize;
-        canvas.drawText("开卡数量", x, y, paint);
-
-        int textPadding = 10;
-        int top = (int) (y - dip2px(getContext(), 12));
-        int left = (int) (x - dip2px(getContext(), 15 + textPadding));
-        drawRectIcon(canvas, left, top);
-    }
-
-    private void drawRectIcon(Canvas canvas, int left, int top) {
-        Rect rect = new Rect();
-        rect.left = left;
-        rect.top = top;
-        rect.bottom = top + dip2px(getContext(), 12);
-        rect.right = left + dip2px(getContext(), 15);
-        mPaint.setColor(Color.parseColor("#02bb9d"));
-        canvas.drawRect(rect, mPaint);
-        float cxLeft = left;
-        float cyLeft = rect.centerY();
-        float radius = (rect.bottom - rect.top) / 2;
-        canvas.drawCircle(cxLeft, cyLeft, radius, mPaint);
-        float cxRight = rect.right;
-        float cyRight = cyLeft;
-        canvas.drawCircle(cxRight, cyRight, radius, mPaint);
-    }
-
-
-    int dip2px(Context context, float dipValue) {
-        final float scale = context.getResources().getDisplayMetrics().density;
-        return (int) (dipValue * scale + 0.5f);
-    }
-
-    int sp2px(Context context, float spValue) {
-        final float fontScale = context.getResources().getDisplayMetrics().scaledDensity;
-        return (int) (spValue * fontScale + 0.5f);
-    }
-
-    public void start() {
-        this.startAnimation(ani);
-    }
-
-    /**
-     * 集成animation的一个动画类
-     */
-    private class HistogramAnimation extends Animation {
-        protected void applyTransformation(float interpolatedTime,
-                                           Transformation t) {
-            super.applyTransformation(interpolatedTime, t);
-
-            if (interpolatedTime < 1.0f) {
-                for (int i = 0; i < aniProgress.length; i++) {
-                    aniProgress[i] = (int) (data.get(i) * interpolatedTime);
-                }
-            } else {
-                for (int i = 0; i < aniProgress.length; i++) {
-                    aniProgress[i] = data.get(i);
-                }
-            }
-
-            invalidate();
-        }
-    }
-
-}
