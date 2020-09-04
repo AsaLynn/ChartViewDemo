@@ -32,6 +32,12 @@ list.add(new ChartEntity("top5", 1253.00));
 columnChartView.setList(list);
 ```
 # 更新日志
+- chartview:1.0.2
+```
+git tag -a v1.0.2 -m '最低支持Android4.0'
+git push origin v1.0.2
+git tag
+```
 - chartview:1.0.1
 ```
 git tag -a v1.0.1 -m '发布正式使用'
