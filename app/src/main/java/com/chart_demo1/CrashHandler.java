@@ -8,7 +8,7 @@ import android.content.Context;
 import android.os.Environment;
 import android.util.Log;
 
-import com.zxn.chart.util.LogUtil;
+import com.zxn.chartview.util.LogUtil;
 
 /**
  */

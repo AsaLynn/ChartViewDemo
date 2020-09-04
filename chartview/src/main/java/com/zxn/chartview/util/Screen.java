@@ -1,4 +1,4 @@
-package com.zxn.chart.util;
+package com.zxn.chartview.util;
 
 import android.app.Activity;
 import android.content.Context;

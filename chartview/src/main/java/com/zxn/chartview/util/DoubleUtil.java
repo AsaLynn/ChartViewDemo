@@ -1,4 +1,4 @@
-package com.zxn.chart.util;
+package com.zxn.chartview.util;
 
 import java.math.BigDecimal;
 import java.text.DecimalFormat;

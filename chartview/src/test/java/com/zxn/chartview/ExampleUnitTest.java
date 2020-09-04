@@ -1,4 +1,4 @@
-package com.zxn.chart;
+package com.zxn.chartview;
 
 import org.junit.Test;
 

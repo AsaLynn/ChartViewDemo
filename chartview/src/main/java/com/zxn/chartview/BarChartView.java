@@ -1,4 +1,4 @@
-package com.zxn.chart;
+package com.zxn.chartview;
 
 import android.content.Context;
 import android.graphics.Canvas;
@@ -10,8 +10,8 @@ import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.Transformation;
 
-import com.zxn.chart.util.LogUtil;
-import com.zxn.chart.util.Screen;
+import com.zxn.chartview.util.LogUtil;
+import com.zxn.chartview.util.Screen;
 
 import java.util.ArrayList;
 import java.util.Collections;

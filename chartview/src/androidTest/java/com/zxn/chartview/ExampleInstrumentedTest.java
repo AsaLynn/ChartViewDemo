@@ -1,4 +1,4 @@
-package com.zxn.chart;
+package com.zxn.chartview;
 
 import android.content.Context;
 import androidx.test.platform.app.InstrumentationRegistry;
