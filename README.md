@@ -13,7 +13,7 @@ implementation 'com.zxn.chartview:chartview:1.0.0'
 ```
 # xml布局
 ```
-<com.zxn.chart.BarChartView
+<com.zxn.chartview.BarChartView
     android:layout_margin="10dp"
     android:id="@+id/columnChartView"
     android:layout_width="match_parent"
