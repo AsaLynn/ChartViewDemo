@@ -6,6 +6,7 @@
 # 效果图
 ![Image text](https://github.com/zhang721688/ChartViewDemo/blob/master/image/image01.png)
 ![Image text](https://github.com/zhang721688/ChartViewDemo/blob/master/image/image02.png)
+![Image text](https://github.com/zhang721688/ChartViewDemo/blob/master/image/image03.png)
 
 # 依赖
 ```
