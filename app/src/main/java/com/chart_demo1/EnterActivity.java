@@ -17,7 +17,7 @@ public class EnterActivity extends AppCompatActivity {
         ButterKnife.bind(this);
     }
 
-    @OnClick({R.id.tv_bar1, R.id.tv_bar2, R.id.tv_bar3})
+    @OnClick({R.id.tv_bar1, R.id.tv_bar2, R.id.tv_bar3, R.id.tv_bar4})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.tv_bar1:
@@ -30,8 +30,7 @@ public class EnterActivity extends AppCompatActivity {
                 BarChatActivity.jumpTo(this);
                 break;
             case R.id.tv_bar4:
-                //BarChatActivity.jumpTo(this);
-
+                CircleChatActivity.jumpTo(this);
                 break;
         }
     }

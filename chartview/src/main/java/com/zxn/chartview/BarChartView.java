@@ -21,6 +21,7 @@ import java.util.Collections;
 import java.util.List;
 
 /**
+ * 长条形柱状图.
  * Updated by zxn on 2020/9/3.
  */
 public class BarChartView extends View {
