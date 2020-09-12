@@ -29,6 +29,10 @@ public class EnterActivity extends AppCompatActivity {
             case R.id.tv_bar3:
                 BarChatActivity.jumpTo(this);
                 break;
+            case R.id.tv_bar4:
+                //BarChatActivity.jumpTo(this);
+
+                break;
         }
     }
 }
