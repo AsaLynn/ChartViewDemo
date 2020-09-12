@@ -27,6 +27,8 @@ package com.zxn.chartview.fitchart;
 import android.graphics.Path;
 import android.graphics.RectF;
 
+import com.zxn.chartview.RingChartView;
+
 class OverdrawValueRenderer extends BaseRenderer implements Renderer {
     public OverdrawValueRenderer(RectF drawingArea, FitChartValue value) {
         super(drawingArea, value);

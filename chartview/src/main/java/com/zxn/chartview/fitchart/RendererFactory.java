@@ -26,7 +26,7 @@ package com.zxn.chartview.fitchart;
 
 import android.graphics.RectF;
 
-class RendererFactory {
+public class RendererFactory {
     public static Renderer getRenderer(AnimationMode mode, FitChartValue value, RectF drawingArea) {
         if (mode == AnimationMode.LINEAR) {
             return new LinearValueRenderer(drawingArea, value);

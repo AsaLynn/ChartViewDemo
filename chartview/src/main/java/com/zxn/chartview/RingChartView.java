@@ -22,7 +22,7 @@
  *
  * Contact: Txus Ballesteros <txus.ballesteros@gmail.com>
  */
-package com.zxn.chartview.fitchart;
+package com.zxn.chartview;
 
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
@@ -39,7 +39,10 @@ import android.util.AttributeSet;
 import android.view.View;
 import android.view.animation.DecelerateInterpolator;
 
-import com.zxn.chartview.R;
+import com.zxn.chartview.fitchart.AnimationMode;
+import com.zxn.chartview.fitchart.FitChartValue;
+import com.zxn.chartview.fitchart.Renderer;
+import com.zxn.chartview.fitchart.RendererFactory;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -56,8 +59,8 @@ public class RingChartView extends View {
     static final int DEFAULT_MAX_VALUE = 100;
     static final int START_OSTIAL_ANGLE_A = -90;//-90
     static final float START_OSTIAL_ANGLE_B = 0.0f;
-    static final int START_ANGLE = -92;//-90
-    static final int ANIMATION_DURATION = 1000;
+    public static final int START_ANGLE = -92;//-90
+    public static final int ANIMATION_DURATION = 1000;
     static final float INITIAL_ANIMATION_PROGRESS = 0.0f;
     static final float MAXIMUM_SWEEP_ANGLE = 360f;
     static final int DESIGN_MODE_SWEEP_ANGLE = 216;

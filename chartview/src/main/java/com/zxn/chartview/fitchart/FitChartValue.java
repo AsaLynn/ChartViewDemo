@@ -33,7 +33,7 @@ public class FitChartValue {
     private float startAngle;
     private float sweepAngle;
 
-    float getValue() {
+    public float getValue() {
         return this.value;
     }
 
@@ -41,16 +41,16 @@ public class FitChartValue {
         return this.color;
     }
 
-    void setPaint(Paint paint) {
+    public void setPaint(Paint paint) {
         this.paint = paint;
         this.paint.setColor(color);
     }
 
-    void setStartAngle(float angle) {
+    public void setStartAngle(float angle) {
         this.startAngle = angle;
     }
 
-    void setSweepAngle(float sweep) {
+    public void setSweepAngle(float sweep) {
         this.sweepAngle = sweep;
     }
 
@@ -58,11 +58,11 @@ public class FitChartValue {
         return this.startAngle;
     }
 
-    float getSweepAngle() {
+    public float getSweepAngle() {
         return this.sweepAngle;
     }
 
-    Paint getPaint() {
+   public Paint getPaint() {
         return this.paint;
     }
 

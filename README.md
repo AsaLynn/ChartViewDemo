@@ -36,7 +36,7 @@ columnChartView.setList(list);
 # 环形图
 ## xml布局
 ```
-<com.zxn.chartview.fitchart.ringchartview
+<com.zxn.chartview.Ringchartview
     android:id="@+id/fitchart"
     android:layout_width="250dp"
     android:layout_height="250dp"

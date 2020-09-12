@@ -26,6 +26,6 @@ package com.zxn.chartview.fitchart;
 
 import android.graphics.Path;
 
-interface Renderer {
+public interface Renderer {
     Path buildPath(float animationProgress, float animationSeek);
 }
